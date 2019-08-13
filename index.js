@@ -1,25 +1,34 @@
 
-const ONE = {
-  binary: '',
-  code: ''
-};
+// assign method 'undefined' to all arrays
+Object.assign(Array.prototype, {
+  get undefined() {
+    let binary = ''; // the binary representation for every char
+    let code = ''; // the final code to execute
 
-const TWO = new Proxy(ONE, {
-  get: function(target, name) {
-    ONE.binary += +!name;
-    if (ONE.binary.length == 7){
-      if (!+ONE.binary) {
-        console.log(ONE.code);
-        eval(ONE.code);
+    // return a Proxy for every access to ['undefined'] or ['']
+    const sic = new Proxy({}, {
+      get: function(_, name) {
+        // compose an ASCII binary code
+        binary += Number(!name);
+        if (binary.length == 7){
+          // if binary is not '0000000'
+          if (binary !== '0000000') {
+            // add more chars to the final code
+            const charCode = parseInt(binary, 2);
+            code += String.fromCharCode(charCode);
+            binary = '';
+          } else {
+            // otherwise eval the code
+            Function(code)();
+          }
+        }
+        return sic;
       }
-      ONE.code += String.fromCharCode(parseInt(ONE.binary, 2));
-      ONE.binary = '';
-    }
-    return TWO;
+    });
+
+    return sic;
   }
 });
-
-Array.prototype[[][[]]] = TWO;
 
 [][[][[]]]
 [[]][[]][[][[]]][[][[]]][[][[]]][[][[]]][[]]
@@ -32,7 +41,7 @@ Array.prototype[[][[]]] = TWO;
 [[][[]]][[]][[][[]]][[]][[][[]]][[][[]]][[]]
 [[][[]]][[][[]]][[][[]]][[][[]]][[][[]]][[][[]]][[][[]]]
 
-console.log(x);
+
 
 function convert(code) {
   return (code + String.fromCharCode(0)) .split('').map(c => c
