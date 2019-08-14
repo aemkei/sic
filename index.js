@@ -1,54 +1,33 @@
-
-// assign method 'undefined' to all arrays
-Object.assign(Array.prototype, {
-  get undefined() {
-    let binary = ''; // the binary representation for every char
-    let code = ''; // the final code to execute
-
-    // return a Proxy for every access to ['undefined'] or ['']
-    const sic = new Proxy({}, {
-      get: function(_, name) {
-        // compose an ASCII binary code
-        binary += Number(!name);
-        if (binary.length == 7){
-          // if binary is not '0000000'
-          if (binary !== '0000000') {
-            // add more chars to the final code
-            const charCode = parseInt(binary, 2);
-            code += String.fromCharCode(charCode);
-            binary = '';
-          } else {
-            // otherwise eval the code
-            Function(code)();
-          }
-        }
-        return sic;
-      }
-    });
-
-    return sic;
-  }
-});
-
-[][[][[]]]
-[[]][[]][[][[]]][[][[]]][[][[]]][[][[]]][[]]
-[[]][[]][[][[]]][[]][[]][[][[]]][[][[]]]
-[[]][[]][[][[]]][[][[]]][[]][[][[]]][[]]
-[[]][[]][[]][[][[]]][[][[]]][[]][[][[]]]
-[[]][[]][[]][[][[]]][[]][[][[]]][[][[]]]
-[[][[]]][[]][[][[]]][[]][[][[]]][[][[]]][[][[]]]
-[[][[]]][[]][[]][[][[]]][[][[]]][[][[]]][[]]
-[[][[]]][[]][[][[]]][[]][[][[]]][[][[]]][[]]
-[[][[]]][[][[]]][[][[]]][[][[]]][[][[]]][[][[]]][[][[]]]
-
-
-
+// converts a given string into a sequence of [] symbols
 function convert(code) {
-  return (code + String.fromCharCode(0)) .split('').map(c => c
+  const undefined = '[][[][[]]]';
+  return undefined + (code + String.fromCharCode(0)).split('').map(c => c
     .charCodeAt(0)
     .toString(2)
     .padStart(7, 0)
     .replace(/0/g, '[[][[]]]')
     .replace(/1/g, '[[]]')
-  ).join('\n')
+  ).join('');
 }
+
+const library = `[C=B=[]].__proto__[C.B]=T=new Proxy(B,{get:(_,N)=>(B+=+!N,B[6]&&(+B||eval(C),C+=String.fromCharCode(parseInt(B,2)),B=[]),T)});
+
+// later in you code …
+`
+
+function convertInput(){
+  const newValue = convert(document.getElementById('input').value);
+  document.getElementById('output').value = library + '\n' + newValue;
+}
+
+document.getElementById('convert').addEventListener('click', (event) => {
+  convertInput()
+  event.preventDefault();
+});
+
+document.getElementById('run').addEventListener('click', (event) => {
+  event.preventDefault();
+  eval(document.getElementById('output').value);
+});
+
+convertInput();
