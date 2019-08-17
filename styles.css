@@ -245,7 +245,8 @@ a {
 }
 
 pre#logo {
-  line-height: 10px
+  font-size: 11px;
+  line-height: 12px;
 }
 
 #container {
