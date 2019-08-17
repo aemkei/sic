@@ -1,14 +1,15 @@
 function convert(code) {
-  return (code + String.fromCharCode(0)) .split('').map(c => c
+  const encoded = code.split('').map(c => c
     .charCodeAt(0)
     .toString(2)
     .padStart(7, 0)
     .replace(/0/g, '._')
     .replace(/1/g, '.__')
-  ).join('\n')
+  );
+  return ['_', ... encoded, '.___'].join('\n')
 }
 
-console.log(convert('alert(1)'))
+console.log(convert('alert(1)'));
 
 (function(){
 
@@ -24,10 +25,10 @@ console.log(convert('alert(1)'))
       binary = '';
     }
 
-    return ___;
+    return _;
   }
 
-  ___ = {
+  _ = {
     get _() {
       return handle(0);
     },
@@ -35,12 +36,21 @@ console.log(convert('alert(1)'))
       return handle(1);
     },
     get ___() {
-      Function(code)();
+      eval(code);
     }
   }
 })()
 
 // min:
-// ___=new Proxy([c=b=""],{get:(_,n)=>(1<(l=n.length-1)&&eval(c),b+=l,b[6]&&(c+=String.fromCharCode(parseInt(b,2)),b=""),___)})
+_=new Proxy([c=b=""],{get:(x,n)=>(1<(l=n.length-1)&&eval(c),b+=l,b[6]&&(c+=String.fromCharCode(parseInt(b,2)),b=""),_)})
 
-___.__.__._._._._.__.__.__._.__.__._._.__.__._._.__._.__.__.__.__._._.__._.__.__.__._.__._._._.__._.__._._._._.__.__._._._.__._.__._.__._._.__.___
+_
+.__.__._._._._.__
+.__.__._.__.__._._
+.__.__._._.__._.__
+.__.__.__._._.__._
+.__.__.__._.__._._
+._.__._.__._._._
+._.__.__._._._.__
+._.__._.__._._.__
+.___
