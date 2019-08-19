@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>[sic] - Encode JS with 2 different characters: []</title>
-    <meta name="description" content="Encode JS with only two different characters: []. Created by Martin Kleppe aka @aemkei.">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <meta name="theme-color" content="#222222" />
-    <meta property="og:title" content="[sic] - Encode JS with two different characters only" />
-    <meta property="og:description" content="A tiny library to inject code using a sequence of square brackets." />
-    <meta property="og:image" content="http://aem1k.com/five/preview-large.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@aemkei" />
-    <meta property="twitter:image" content="http://aem1k.com/sic/preview-large.png" />
-    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
-    <link href='styles.css' rel='stylesheet' type='text/css' />
-  </head>
-  <body>
-    <div id="container">
-      <h1>[sic]</h1>
-      <h2>Encode JS with 2 different characters: []</h2>
 
-      <pre id="logo">
+<head>
+  <title>[sic] - Encode JS with 2 different characters: []</title>
+  <meta name="description"
+    content="Encode JS with only two different characters: []. Created by Martin Kleppe aka @aemkei.">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="theme-color" content="#222222" />
+  <meta property="og:title" content="[sic] - Encode JS with two different characters only" />
+  <meta property="og:description" content="A tiny library to inject code using a sequence of square brackets." />
+  <meta property="og:image" content="http://aem1k.com/five/preview-large.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@aemkei" />
+  <meta property="twitter:image" content="http://aem1k.com/sic/preview-large.png" />
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+  <link href='styles.css' rel='stylesheet' type='text/css' />
+</head>
+
+<body>
+  <div id="container">
+    <h1>[sic]</h1>
+    <h2>Encode JS with 2 different characters: []</h2>
+
+    <pre id="logo">
 [][[][[]] <b>][[]][[]][[ ][[]] ][[][[]]][[</b> ][[]]][[]
 [[]]][[]] <b>[[]][[]][[] [[]]] [[]][[]][[]</b> [[]]][[][
 []]][     <b>[]][[]][[][ []]][ [][[] ]][[]</b>     ][[][
@@ -33,39 +36,198 @@
 [[]]][[][ <b>[]]][[][[]] ][[][ []]][[][[]]</b> ][[][[]]]
       </pre>
 
+    <p>
+      A tiny library to inject code using a sequence of square brackets: <code>[</code> and <code>]</code>. Created by
+      Martin Kleppe aka <a href="https://twitter.com/aemkei">@aemkei</a>.
+    </p>
+
+    <div>
       <p>
-        A tiny library to inject code using a sequence of square brackets: <code>[</code> and <code>]</code>. Created by Martin Kleppe aka <a href="https://twitter.com/aemkei">@aemkei</a>.
-      </p>
-
-      <div>
-        <p>
-          <h3>Example</h3>
-          <textarea id="input">alert("[sic]")</textarea>
-          <a href="#" id="convert">Click to Convert ↓↓↓↓↓</a>
-          <span id="count">...</span>
-          <textarea id="output" cols=10 onclick="this.select();">
+        <h3>Example</h3>
+        <textarea id="input">alert("[sic]")</textarea>
+        <a href="#" id="convert">Click to Convert ↓↓↓↓↓</a>
+        <span id="count">...</span>
+        <textarea id="output" cols=10 onclick="this.select();">
 </textarea>
-          <div id="your-output">↑ Run <a href="#" id="run">the code</a> on this site.</div>
-</p>
-
-  <hr>
-
-  <h2 id="explanation">Explanation</h2>
-
-  s
-  <h3 id="relatedlinks">Related Links</h3>
-
-  <ul>
-  <li><a href="https://twitter.com/aemkei">@aemkei</a></li>
-
-  <li>Read more about <a href="http://www.jsfuck.com/">JSFuck</a></li>
-
-  <li>Visit <a href="https://aem1k.com">aem1k.com</a> for more hacks</li>
-  </ul>
+        <div id="your-output">↑ Run <a href="#" id="run">the code</a> on this site.</div>
+      </p>
 
       <hr>
 
-<pre id="logo">
+      <h3 id="explanation">Explanation</h3>
+
+      <p>The basic idea is to encode strings using the binary representation of all ASCII values:</p>
+
+      <pre>code = 'alert';
+
+characters = code.split('');
+// ["a", "l", "e", "r", "t"]
+
+ascii = characters.map(c =&gt; c.charCodeAt(0));
+// [97, 108, 101, 114, 116]
+
+binary = ascii.map(c =&gt; c.toString(2));
+// ["1100001", "1101100", "1100101", "1110010", "1110100"]
+
+encoded = binary.join('');
+// "11000011101100110010111100101110100"
+</pre>
+
+      <p>To decode the string, we need to convert it back:</p>
+
+      <pre>binary = encoded.match(/.{7}/g);
+// ["1100001", "1101100", "1100101", "1110010", "1110100"]
+
+ascii = binary.map(b =&gt; parseInt(b, 2));
+// [97, 108, 101, 114, 116]
+
+characters = ascii.map(String.fromCharCode);
+// ["a", "l", "e", "r", "t"]
+
+code = characters.join('');
+// "alert"
+</pre>
+
+      <p>Unfortunately the encoded string has two extra quotes around the binary representation. The question is: How
+        can we get rid of the <code>"</code> symbol and only use two different characters to obfuscate our code? It
+        turns out that there are (at least) three different solutions:</p>
+
+      <ul>
+        <li><code>.x</code> - Property Accessors Dot Notation</li>
+
+        <li><code>x`</code> - Tagged Template Literals</li>
+
+        <li><code>[]</code> - Arrays and Bracket Notation</li>
+      </ul>
+
+      <p>The dot notation is quite simple. We only have to assign binary values to different properties. A custom entry
+        point <code>xxx</code> has two properties <code>.x = 0</code> and <code>.xx = 1</code>. By using chaining we
+        write letters and works.</p>
+
+      <p>But let us use <code>_</code> instead of <code>x</code> in our example because it looks more interesting:</p>
+
+      <pre>___.__._._._._.__ = "1100001"
+</pre>
+
+      <p>Here is the code that will parse and eval the script:</p>
+
+      <pre>let binary = ''; // binary representation for every char
+let code = ''; // final code to execute
+
+// main entry point
+___ = {
+  get _()   { return handle(0); },
+  get __()  { return handle(1); },
+  get ___() { eval(code); }
+}
+
+function handle(bit) {
+  // compose an ASCII binary code
+  binary += bit;
+  if (binary.length == 7) {
+    // add more chars to the final code
+    const charCode = parseInt(binary, 2);
+    code += String.fromCharCode(charCode);
+    binary = '';
+  }
+  // return entry to allow chaining
+  return ___;
+}
+</pre>
+
+      <p>Note that the last getter <code>___</code> will evaluate the code. An obfuscated <code>alert(1)</code> looks
+        like this:</p>
+
+      <pre>___                   // entry
+.__.__._._._._.__     // "a"
+.__.__._.__.__._._    // "l"
+.__.__._._.__._.__    // "e"
+.__.__.__._._.__._    // "r"
+.__.__.__._.__._._    // "t"
+._.__._.__._._._      // "("
+._.__.__._._._.__     // "1"
+._.__._.__._._.__     // ")"
+.___                  // eval
+</pre>
+
+      <p>A similar approach uses tagged template literals where <code></code>=0 and <code>x</code>=1. The
+        obfuscated code looks super dense and the decoder is only 90 bytes:</p>
+
+      <pre>
+// obfuscator
+C=B='',_=([l])=>(B+=+!!l,B[6]&&(+B||eval(C),C
++=String.fromCharCode(parseInt(B,2)),B=[]),_)
+
+// alert(1)
+_
+`_``_``````````_`
+`_``_````_``_`````
+`_``_``````_````_`
+`_``_``_``````_```
+`_``_``_````_`````
+```_````_```````
+```_``_````````_`
+```_````_``````_`
+``````````````
+</pre>
+
+<p>
+      In the final step, we use the array literal notation `[]` instead of our own <code>_</code> entry point and access properties
+      using the bracket notation <code>[][propertyString]</code>.
+    </p>
+    <p>
+      Using squared brackets we can create exactly two different strings - enough to encode our zeros and ones:
+    </p>
+
+      <pre>
+String([])     === ''
+String([][[]]) === 'undefinded'</pre>
+      <p>Here is the full script:</p>
+
+      <pre>
+// assign method 'undefined' to all arrays
+Object.assign(Array.prototype, {
+  get undefined() {
+    let binary = ''; // the binary representation for every char
+    let code = ''; // the final code to execute
+
+    // return a Proxy for every access to ['undefined'] or ['']
+    const sic = new Proxy({}, {
+      get: function(_, name) {
+        // compose an ASCII binary code
+        binary += Number(!name);
+        if (binary.length == 7){
+          // if binary is not '0000000'
+          if (binary !== '0000000') {
+            // add more chars to the final code
+            const charCode = parseInt(binary, 2);
+            code += String.fromCharCode(charCode);
+            binary = '';
+          } else {
+            // otherwise eval the code
+            Function(code)();
+          }
+        }
+        return sic;
+      }
+    });
+
+    return sic;
+  }
+});
+      </pre>
+
+
+      <h3 id="relatedlinks">Related Links</h3>
+
+      <ul>
+        <li>Follow<a href="https://twitter.com/aemkei">@aemkei</a> on Twitter</li>
+        <li>Visit <a href="https://aem1k.com">aem1k.com</a> for more hacks</li>
+      </ul>
+
+      <hr>
+
+      <pre id="logo">
       <b>#</b>
       <b>#</b>
      <b>##</b>
@@ -81,5 +243,6 @@
     </div>
     <script src="index.js"></script>
 
-  </body>
+</body>
+
 </html>

@@ -26,7 +26,6 @@ console.log(convert('alert(1)'));
         const charCode = parseInt(binary, 2);
         code += String.fromCharCode(charCode);
         binary = '';
-        console.log(code);
       } else {
         // otherwise eval the code
         Function(code)();

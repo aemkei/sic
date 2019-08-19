@@ -20,6 +20,10 @@ function convertInput(){
   document.getElementById('output').value = library + '\n' + newValue;
 }
 
+document.getElementById('input').addEventListener('input', (event) => {
+  convertInput();
+});
+
 document.getElementById('convert').addEventListener('click', (event) => {
   convertInput()
   event.preventDefault();

@@ -120,7 +120,7 @@ ol > li:after {
   counter-increment: ol;
 }
 pre {
-  color: yellow;
+  color: #999;
 /*  margin-left: 34px;
   padding-left: 4ch;*/
 }
@@ -245,8 +245,9 @@ a {
 }
 
 pre#logo {
-  font-size: 11px;
-  line-height: 12px;
+  color: yellow;
+  font-size: 12px;
+  line-height: 13px;
 }
 
 #container {
