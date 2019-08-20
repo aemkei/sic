@@ -37,7 +37,9 @@
       </pre>
 
     <p>
-      A tiny library to inject code using a sequence of square brackets: <code>[</code> and <code>]</code>. Created by
+      A tiny library to inject self-executing code using a sequence of square brackets: <code>[</code> and <code>]</code>.
+
+      Created by
       Martin Kleppe aka <a href="https://twitter.com/aemkei">@aemkei</a>.
     </p>
 
@@ -100,11 +102,13 @@ code = characters.join('');
         <li><code>[]</code> - Arrays and Bracket Notation</li>
       </ul>
 
-      <p>The dot notation is quite simple. We only have to assign binary values to different properties. A custom entry
-        point <code>xxx</code> has two properties <code>.x = 0</code> and <code>.xx = 1</code>. By using chaining we
-        write letters and works.</p>
+      <p>The dot notation is quite simple because we can assign the two bits to different properties. In our example,
+        the custom entry
+        point <code>xxx</code> has two properties <code>.x = 0</code> and <code>.xx = 1</code>. By chaining these
+        properties we
+        can encode binary values.</p>
 
-      <p>But let us use <code>_</code> instead of <code>x</code> in our example because it looks more interesting:</p>
+      <p>Let us use <code>_</code> instead of <code>x</code> for our example because it looks more interesting:</p>
 
       <pre>___.__._._._._.__ = "1100001"
 </pre>
@@ -135,7 +139,8 @@ function handle(bit) {
 }
 </pre>
 
-      <p>Note that the last getter <code>___</code> will evaluate the code. An obfuscated <code>alert(1)</code> looks
+      <p>Note that the last getter <code>___</code> will evaluate the code. It is an implicit function call that is
+        triggered when we access the property. An obfuscated <code>alert(1)</code> looks
         like this:</p>
 
       <pre>___                   // entry
@@ -150,8 +155,7 @@ function handle(bit) {
 .___                  // eval
 </pre>
 
-      <p>A similar approach uses tagged template literals where <code></code>=0 and <code>x</code>=1. The
-        obfuscated code looks super dense and the decoder is only 90 bytes:</p>
+      <p>A similar approach uses tagged template literals where <code></code>=0 and <code>x</code>=1. The obfuscated code looks super dense and our decoder is only 90 bytes:</p>
 
       <pre>
 // obfuscator
@@ -171,13 +175,14 @@ _
 ``````````````
 </pre>
 
-<p>
-      In the final step, we use the array literal notation `[]` instead of our own <code>_</code> entry point and access properties
-      using the bracket notation <code>[][propertyString]</code>.
-    </p>
-    <p>
-      Using squared brackets we can create exactly two different strings - enough to encode our zeros and ones:
-    </p>
+      <p>
+        In the final step, we use the array literal notation <code>[]</code> instead of our own <code>_</code> entry point and
+        access properties
+        using the bracket notation <code>[][propertyString]</code>.
+      </p>
+      <p>
+        With squared brackets we can create exactly two different strings: "" and "undefined" - enough to encode our zeros and ones:
+      </p>
 
       <pre>
 String([])     === ''
