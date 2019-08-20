@@ -186,8 +186,14 @@ _
 
       <pre>
 String([])     === ''
-String([][[]]) === 'undefinded'</pre>
+String([][[]]) === 'undefined' it will be `0`.</pre>
       <p>Here is the full script:</p>
+
+        <p>
+          Here is the minified version ()
+        </p>
+
+        <pre>[C=B=[]].__proto__[C.B]=T=new Proxy(B,{get:(_,N)=>(B+=+!N,B[6]&&(+B||eval(C),C+=String.fromCharCode(parseInt(B,2)),B=[]),T)});</pre>
 
       <pre>
 // assign method 'undefined' to all arrays
@@ -222,6 +228,16 @@ Object.assign(Array.prototype, {
 });
       </pre>
 
+      <p>
+        This uses a Proxy instead of a simple getter. If the property name is empty ("") it will be converted to <code>1</code> and if the name is "undefined" it will be <code>0</code>.
+      </p>
+
+      <p>
+        Here is the minified version (< 128 bytes):
+      </p>
+
+      <pre>[C=B=[]].__proto__[C.B]=T=new Proxy(B,{get:(_,N)=>(B+=+!N,B[6]&&
+(+B||eval(C),C+=String.fromCharCode(parseInt(B,2)),B=[]),T)});</pre>
 
       <h3 id="relatedlinks">Related Links</h3>
 
