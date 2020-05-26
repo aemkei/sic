@@ -12,7 +12,7 @@ function convert(code) {
 
 const library = `[C=B=[]].__proto__[C.B]=T=new Proxy(B,{get:(_,N)=>(B+=+!N,B[6]&&(+B||eval(C),C+=String.fromCharCode(parseInt(B,2)),B=[]),T)});
 
-// later in you code …
+// later in your code …
 `
 
 function convertInput(){
